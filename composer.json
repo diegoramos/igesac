@@ -1,0 +1,6 @@
+{
+    "require": {
+        "mpdf/mpdf": "^7.1",
+        "giansalex/peru-consult": "^4.4"
+    }
+}
