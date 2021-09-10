@@ -225,7 +225,7 @@
 								<?php foreach($item_images as $image) { ?>
 							  <div class="col-sm-6 col-md-4">
 							    <div class="thumbnail">
-							      <?php echo img(array('src' => app_file_url($image['image_id']),'class'=>' img-polaroid')); ?>
+							      <?php echo img(array('src' => app_all_file_url($image['image_id']),'class'=>' img-polaroid')); ?>
 							      <!-- <div class="caption">
 											<p>...</p>
 							      </div> -->

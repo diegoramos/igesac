@@ -322,7 +322,7 @@ function get_item_data_row($item,$controller)
 	$params = $CI->session->userdata($controller_name.'_search_data') ? $CI->session->userdata($controller_name.'_search_data') : array('deleted' => 0);
 	$has_edit_quantity_permission = $CI->Employee->has_module_action_permission('items','edit_quantity', $CI->Employee->get_logged_in_employee_info()->person_id);
 	
-	$avatar_url=$item->main_image_id ?  app_file_url($item->main_image_id) : base_url('assets/assets/images/default.png');
+	$avatar_url=$item->main_image_id ?  app_all_file_url($item->main_image_id) : base_url('assets/assets/images/default.png');
 
 	$table_data_row='<tr>';
 	$table_data_row.="<td><input type='checkbox' id='item_$item->item_id' value='".$item->item_id."'/><label for='item_$item->item_id'><span></span></label></td>";
@@ -395,7 +395,7 @@ function get_item_data_row($item,$controller)
 		}	
 	if ($avatar_url)
 	{	
-		$table_data_row.="<td><a href='$avatar_url' class='rollover'><img src='".$avatar_url."' alt='".H($item->name)."' class='img-polaroid' width='45' /></a></td>";
+		$table_data_row.="<td><a href='$avatar_url' class='rollover' data-toggle='lightbox'><img src='".$avatar_url."' alt='".H($item->name)."' class='img-polaroid' width='45' /></a></td>";
 	}
 	
 	$table_data_row.='</tr>';
@@ -877,4 +877,99 @@ function get_expenses_data_row($expense,$controller)
 	$table_data_row.='</tr>';
 	return $table_data_row;
 }
+
+function get_requirements_manage_table($requirements,$controller)
+{
+	$CI =& get_instance();
+	$controller_name=strtolower(get_class($CI));
+	$params = $CI->session->userdata($controller_name.'_search_data') ? $CI->session->userdata($controller_name.'_search_data') : array('deleted' => 0);
+	
+	$table='<table class="tablesorter table table-hover" id="sortable_table">';
+
+	$headers[] = array('label' => '<input type="checkbox" id="select_all" /><label for="select_all"><span></span></label>', 'sort_column' => '');
+	if(!$params['deleted'])
+	{
+		$headers[] = array('label' => lang('common_edit'), 'sort_column' => '');
+	}
+	
+	$headers[] = array('label' => lang('requirements_id'), 'sort_column' => 'id');
+	$headers[] = array('label' => lang('requirements_num'), 'sort_column' => 'requirement_num');
+	$headers[] = array('label' => lang('proyect_name'), 'sort_column' => 'proyect_name');
+	$headers[] = array('label' => lang('requirements_date'), 'sort_column' => 'requirement_date');
+	$headers[] = array('label' => lang('employee_recv'), 'sort_column' => 'employee_recv');
+	$headers[] = array('label' => lang('status_req'), 'sort_column' => 'status');
+
+	$table.='<thead><tr>';
+	$count = 0;
+	foreach($headers as $header)
+	{
+		$count++;
+		$label = $header['label'];
+		$sort_col = $header['sort_column'];
+		if ($count == 1)
+		{
+			$table.="<th data-sort-column='$sort_col' class='leftmost'>$label</th>";
+		}
+		elseif ($count == count($headers))
+		{
+			$table.="<th data-sort-column='$sort_col' class='rightmost'>$label</th>";
+		}
+		else
+		{
+			$table.="<th data-sort-column='$sort_col'>$label</th>";		
+		}
+	}
+	$table.='</tr></thead><tbody>';
+	$table.=get_requirements_manage_table_data_rows($requirements,$controller);
+	$table.='</tbody></table>';
+	return $table;
+}
+/*
+Gets the html data rows for the items.
+*/
+function get_requirements_manage_table_data_rows($requirements,$controller)
+{
+	$CI =& get_instance();
+
+	$table_data_rows='';
+	
+	foreach($requirements->result() as $requirement)
+	{
+		$table_data_rows.=get_requirements_data_row($requirement,$controller);
+	}
+	
+	if($requirements->num_rows()==0)
+	{
+		$table_data_rows.="<tr><td colspan='1000'><span class='col-md-12 text-center text-warning' >".lang('expenses_no_expenses_to_display')."</span></td></tr>";
+	}
+	
+	return $table_data_rows;
+}
+
+function get_requirements_data_row($requirement,$controller)
+{
+	$CI =& get_instance();
+	$controller_name=strtolower(get_class($CI));
+	$params = $CI->session->userdata($controller_name.'_search_data') ? $CI->session->userdata($controller_name.'_search_data') : array('deleted' => 0);
+	
+	$controller_name=strtolower(get_class($CI));
+	$table_data_row='<tr>';
+	$table_data_row.="<td><input type='checkbox' id='expenses_$requirement->id' value='".$requirement->id."'/><label for='expenses_$requirement->id'><span></span></label></td>";
+	
+	if(!$params['deleted'])
+	{
+		$table_data_row.='<td>'.anchor($controller_name."/view/$requirement->id/2	", lang('common_edit'),array('class'=>'','title'=>lang($controller_name.'_update'))).'</td>';
+	}
+	
+	$table_data_row.='<td>'.$requirement->id.'</td>';
+	$table_data_row.='<td>'.H($requirement->requirement_num).'</td>';
+	$table_data_row.='<td>'.H($requirement->proyect_name).'</td>';
+	$table_data_row.='<td>'.date(get_date_format(), strtotime($requirement->requirement_date)).'</td>';
+	$table_data_row.='<td>'.H($requirement->employee_recv).'</td>';
+	$table_data_row.='<td><div class="badge badge-work_order" style="background-color:'.$requirement->color.'">'.H($requirement->name).'</div></td>';
+
+	$table_data_row.='</tr>';
+	return $table_data_row;
+}
+
 ?>

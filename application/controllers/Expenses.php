@@ -8,10 +8,10 @@ class Expenses extends Secure_area implements Idata_controller {
     function __construct() {
 
         parent::__construct('expenses');
-		  $this->load->model('Expense');
-		  $this->load->model('Category');
+		  	$this->load->model('Expense');
+		  	$this->load->model('Category');
   			$this->lang->load('expenses');
-  			$this->lang->load('module');		
+  			$this->lang->load('module');
 		  
     }
 
@@ -37,12 +37,14 @@ class Expenses extends Secure_area implements Idata_controller {
             $config['total_rows'] = $this->Expense->count_all($params['deleted']);
             $table_data = $this->Expense->get_all($params['deleted'],$data['per_page'], $params['offset'], $params['order_col'], $params['order_dir']);
         }
+
         $this->load->library('pagination');$this->pagination->initialize($config);
         $data['pagination'] = $this->pagination->create_links();
         $data['order_col'] = $params['order_col'];
         $data['order_dir'] = $params['order_dir'];
         $data['total_rows'] = $config['total_rows'];
         $data['manage_table'] = get_expenses_manage_table($table_data, $this);
+
         $this->load->view('expenses/manage', $data);
     }
 
@@ -78,7 +80,8 @@ class Expenses extends Secure_area implements Idata_controller {
 
     function search() {
 			
-				$params = $this->session->userdata('expenses_search_data');
+		$params = $this->session->userdata('expenses_search_data');
+
         $this->check_action_permission('search');
 
         $search = $this->input->post('search');
@@ -86,7 +89,6 @@ class Expenses extends Secure_area implements Idata_controller {
         $order_col = $this->input->post('order_col') ? $this->input->post('order_col') : 'id';
         $order_dir = $this->input->post('order_dir') ? $this->input->post('order_dir') : 'asc';
 				$deleted = isset($params['deleted']) ? $params['deleted'] : 0;
-
         $expenses_search_data = array('offset' => $offset, 'order_col' => $order_col, 'order_dir' => $order_dir, 'search' => $search,'deleted' => $deleted);
         $this->session->set_userdata("expenses_search_data", $expenses_search_data);
         $per_page = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
@@ -99,6 +101,16 @@ class Expenses extends Secure_area implements Idata_controller {
         $data['manage_table'] = get_expenses_manage_table_data_rows($search_data, $this);
         echo json_encode(array('manage_table' => $data['manage_table'], 'pagination' => $data['pagination'],'total_rows' => $config['total_rows']));
     }
+
+	public function buscar($search)
+	{
+        echo $search;
+        $search_data = $this->Expense->search($search);
+        $config['total_rows'] = $this->Expense->search_count_all($search);
+        echo "<pre>";
+        print_r ($search_data->result());
+        echo "</pre>";
+	}
 
     function clear_state() {
 			$params = $this->session->userdata('expenses_search_data');
@@ -178,14 +190,14 @@ class Expenses extends Secure_area implements Idata_controller {
         $expense_data = array(
             'expense_type' => $this->input->post('expenses_type'),
             'expense_description' => $this->input->post('expenses_description'),
-				'expense_reason' => $this->input->post('expense_reason'),
+			'expense_reason' => $this->input->post('expense_reason'),
             'expense_date' => date('Y-m-d',  strtotime($this->input->post('expenses_date'))),
             'expense_amount' => $this->input->post('expenses_amount'),
             'expense_tax' => $this->input->post('expenses_tax'),
             'expense_note' => $this->input->post('expenses_note'),
             'employee_id' => $this->input->post('employee_id'),
-				'approved_employee_id' => $this->input->post('approved_employee_id') ? $this->input->post('approved_employee_id') : NULL,
-				'category_id' => $category_id,
+			'approved_employee_id' => $this->input->post('approved_employee_id') ? $this->input->post('approved_employee_id') : NULL,
+			'category_id' => $category_id,
             'location_id' => $this->Employee->get_logged_in_employee_current_location_id(),
         );
 
@@ -194,16 +206,16 @@ class Expenses extends Secure_area implements Idata_controller {
 		  {
 			  if ($this->input->post('cash_register_id'))
 			  {
-						$cash_register = $this->Register->get_register_log_by_id($this->input->post('cash_register_id'));
-						$register_log_id = $cash_register->register_log_id;
-						$amount = to_currency_no_money($this->input->post('expenses_amount') + $this->input->post('expenses_tax'));
-						$this->Register->add_expense_amount_to_register_log($register_log_id,'common_cash',$amount);
+					$cash_register = $this->Register->get_register_log_by_id($this->input->post('cash_register_id'));
+					$register_log_id = $cash_register->register_log_id;
+					$amount = to_currency_no_money($this->input->post('expenses_amount') + $this->input->post('expenses_tax'));
+					$this->Register->add_expense_amount_to_register_log($register_log_id,'common_cash',$amount);
 		  			$employee_id_audit = $this->Employee->get_logged_in_employee_info()->person_id;
 				
 		  			$register_audit_log_data = array(
 		  				'register_log_id'=> $cash_register->register_log_id,
 		  				'employee_id'=> $employee_id_audit,
-							'payment_type'=> 'common_cash',
+						'payment_type'=> 'common_cash',
 		  				'date' => date('Y-m-d H:i:s'),
 		  				'amount' => -$amount,
 		  				'note' => lang('common_expenses'). ' - '.$this->input->post('expenses_note'),
@@ -237,17 +249,16 @@ class Expenses extends Secure_area implements Idata_controller {
         $this->check_action_permission('delete');
         $expenses_to_delete = $this->input->post('ids');
         if ($this->Expense->delete_list($expenses_to_delete)) {
-
             echo json_encode(array('success' => true, 'message' => lang('expenses_successful_deleted') . ' ' . lang('expenses_one_or_multiple')));
         } else {
             echo json_encode(array('success' => false, 'message' => lang('expenses_cannot_be_deleted')));
         }
     }
+
     function undelete() {
         $this->check_action_permission('delete');
         $expenses_to_delete = $this->input->post('ids');
         if ($this->Expense->undelete_list($expenses_to_delete)) {
-
             echo json_encode(array('success' => true, 'message' => lang('expenses_successful_undeleted') . ' ' . lang('expenses_one_or_multiple')));
         } else {
             echo json_encode(array('success' => false, 'message' => lang('expenses_cannot_be_undeleted')));
@@ -255,16 +266,16 @@ class Expenses extends Secure_area implements Idata_controller {
     }
 		
 		
-		function toggle_show_deleted($deleted=0)
-		{
-			$this->check_action_permission('search');
+	function toggle_show_deleted($deleted=0)
+	{
+		$this->check_action_permission('search');
+	
+		$params = $this->session->userdata('expenses_search_data') ? $this->session->userdata('expenses_search_data') : array('offset' => 0, 'order_col' => 'id', 'order_dir' => 'desc', 'search' => FALSE,'deleted' => 0);
+		$params['deleted'] = $deleted;
+		$params['offset'] = 0;
 		
-			$params = $this->session->userdata('expenses_search_data') ? $this->session->userdata('expenses_search_data') : array('offset' => 0, 'order_col' => 'id', 'order_dir' => 'desc', 'search' => FALSE,'deleted' => 0);
-			$params['deleted'] = $deleted;
-			$params['offset'] = 0;
-			
-			$this->session->set_userdata("expenses_search_data",$params);
-		}
+		$this->session->set_userdata("expenses_search_data",$params);
+	}
 		
 }
 

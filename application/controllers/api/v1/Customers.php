@@ -33,106 +33,106 @@ class Customers extends REST_Controller {
         parent::__construct();
     }
 	
-		private function _amount_to_spend_for_next_point($current_spend_for_points)
+	private function _amount_to_spend_for_next_point($current_spend_for_points)
+	{
+		if($this->config->item('enable_customer_loyalty_system') && $this->config->item('loyalty_option') == 'advanced')
 		{
-			if($this->config->item('enable_customer_loyalty_system') && $this->config->item('loyalty_option') == 'advanced')
-			{
-				list($spend_amount_for_points, ) = explode(":",$this->config->item('spend_to_point_ratio'),2);
-				$spend_amount_for_points = (float)$spend_amount_for_points;
-				
-				return ($spend_amount_for_points - (float)$current_spend_for_points);
-			}	
-		}
-
-		private function _remaining_sales_before_discount($current_sales_for_discount)
-		{
-			if($this->config->item('enable_customer_loyalty_system') && $this->config->item('loyalty_option') == 'simple')
-			{
-				$number_of_sales_for_discount = (int)$this->config->item('number_of_sales_for_discount');
-				return ($number_of_sales_for_discount - (int)$current_sales_for_discount);
-			}
-		}
-		
-		private function _customer_result_to_array($customer)
-		{
-				$customer_return = array(
-					'person_id' => (int)$customer->person_id,
-					'first_name' => $customer->first_name,
-					'last_name' => $customer->last_name,
-					'email' => $customer->email,
-					'phone_number' => $customer->phone_number,
-					'address_1' => $customer->address_1,
-					'address_2' => $customer->address_2,
-					'city' => $customer->city,
-					'state' => $customer->state,
-					'zip' => $customer->zip,
-					'country' => $customer->country,
-					'comments' => $customer->comments,
-					'internal_notes' => $customer->internal_notes,
-					'custom_fields' => array(),
-					'company_name' => $customer->company_name,
-					'tier_id' => (int)$customer->tier_id,
-					'account_number' => $customer->account_number,
-					'taxable' => (boolean)$customer->taxable,
-					'tax_certificate' => $customer->tax_certificate,
-					'override_default_tax' => (boolean)$customer->override_default_tax,
-					'tax_class_id' => (int)$customer->tax_class_id,
-					'balance' => (float)$customer->balance,
-					'credit_limit' => (float)$customer->credit_limit,
-					'disable_loyalty' => (boolean)$customer->disable_loyalty,
-					'points' => (int)$customer->points,
-					'amount_to_spend_for_next_point' => (float)$this->_amount_to_spend_for_next_point($customer->current_spend_for_points),
-					'remaining_sales_before_discount' => (float)$this->_remaining_sales_before_discount($customer->current_sales_for_discount),
-					'image_url' => $customer->image_id ? app_file_url($customer->image_id) : '',
-					'created_at' => $customer->create_date ? date(get_date_format().' '.get_time_format(), strtotime($customer->create_date)) : NULL,
-					'location_id' => $customer->location_id ? (int)$customer->location_id : NULL,
-				);
-
-				for($k=1;$k<=NUMBER_OF_PEOPLE_CUSTOM_FIELDS;$k++)
-				{
-					if($this->Customer->get_custom_field($k) !== false)
-					{
-						$field = array();
-						$field['label']= $this->Customer->get_custom_field($k);
-						if($this->Customer->get_custom_field($k,'type') == 'date')
-						{
-							$field['value'] = date_as_display_date($customer->{"custom_field_{$k}_value"});
-						}
-						else
-						{
-							$field['value'] = $customer->{"custom_field_{$k}_value"};
-						}
-						
-						$customer_return['custom_fields'][$field['label']] = $field['value'];
-
-					}
-	
-				}
-				
-				return $customer_return;
-		}
-
-		public function index_delete($person_id)
-		{
-			$this->load->model('Customer');
-
-			if ($person_id === NULL || !is_numeric($person_id))
-      {
-      		$this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);
-			}
-			  $customer = $this->Customer->get_info($person_id);
-      	if ($customer->person_id && !$customer->deleted)
-				{	
-						$this->Customer->delete($person_id);
-				    $customer_return = $this->_customer_result_to_array($customer);
-						$this->response($customer_return, REST_Controller::HTTP_OK);
-				}
-				else
-				{
-						$this->response(NULL, REST_Controller::HTTP_NOT_FOUND);
-				}
+			list($spend_amount_for_points, ) = explode(":",$this->config->item('spend_to_point_ratio'),2);
+			$spend_amount_for_points = (float)$spend_amount_for_points;
 			
+			return ($spend_amount_for_points - (float)$current_spend_for_points);
+		}	
+	}
+
+	private function _remaining_sales_before_discount($current_sales_for_discount)
+	{
+		if($this->config->item('enable_customer_loyalty_system') && $this->config->item('loyalty_option') == 'simple')
+		{
+			$number_of_sales_for_discount = (int)$this->config->item('number_of_sales_for_discount');
+			return ($number_of_sales_for_discount - (int)$current_sales_for_discount);
 		}
+	}
+	
+	private function _customer_result_to_array($customer)
+	{
+			$customer_return = array(
+				'person_id' => (int)$customer->person_id,
+				'first_name' => $customer->first_name,
+				'last_name' => $customer->last_name,
+				'email' => $customer->email,
+				'phone_number' => $customer->phone_number,
+				'address_1' => $customer->address_1,
+				'address_2' => $customer->address_2,
+				'city' => $customer->city,
+				'state' => $customer->state,
+				'zip' => $customer->zip,
+				'country' => $customer->country,
+				'comments' => $customer->comments,
+				'internal_notes' => $customer->internal_notes,
+				'custom_fields' => array(),
+				'company_name' => $customer->company_name,
+				'tier_id' => (int)$customer->tier_id,
+				'account_number' => $customer->account_number,
+				'taxable' => (boolean)$customer->taxable,
+				'tax_certificate' => $customer->tax_certificate,
+				'override_default_tax' => (boolean)$customer->override_default_tax,
+				'tax_class_id' => (int)$customer->tax_class_id,
+				'balance' => (float)$customer->balance,
+				'credit_limit' => (float)$customer->credit_limit,
+				'disable_loyalty' => (boolean)$customer->disable_loyalty,
+				'points' => (int)$customer->points,
+				'amount_to_spend_for_next_point' => (float)$this->_amount_to_spend_for_next_point($customer->current_spend_for_points),
+				'remaining_sales_before_discount' => (float)$this->_remaining_sales_before_discount($customer->current_sales_for_discount),
+				'image_url' => $customer->image_id ? app_file_url($customer->image_id) : '',
+				'created_at' => $customer->create_date ? date(get_date_format().' '.get_time_format(), strtotime($customer->create_date)) : NULL,
+				'location_id' => $customer->location_id ? (int)$customer->location_id : NULL,
+			);
+
+			for($k=1;$k<=NUMBER_OF_PEOPLE_CUSTOM_FIELDS;$k++)
+			{
+				if($this->Customer->get_custom_field($k) !== false)
+				{
+					$field = array();
+					$field['label']= $this->Customer->get_custom_field($k);
+					if($this->Customer->get_custom_field($k,'type') == 'date')
+					{
+						$field['value'] = date_as_display_date($customer->{"custom_field_{$k}_value"});
+					}
+					else
+					{
+						$field['value'] = $customer->{"custom_field_{$k}_value"};
+					}
+					
+					$customer_return['custom_fields'][$field['label']] = $field['value'];
+
+				}
+
+			}
+			
+			return $customer_return;
+	}
+
+	public function index_delete($person_id)
+	{
+		$this->load->model('Customer');
+
+		if ($person_id === NULL || !is_numeric($person_id))
+  	{
+  		$this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);
+		}
+		  $customer = $this->Customer->get_info($person_id);
+  	if ($customer->person_id && !$customer->deleted)
+			{	
+					$this->Customer->delete($person_id);
+			    $customer_return = $this->_customer_result_to_array($customer);
+					$this->response($customer_return, REST_Controller::HTTP_OK);
+			}
+			else
+			{
+					$this->response(NULL, REST_Controller::HTTP_NOT_FOUND);
+			}
+		
+	}
 				
     public function index_get($person_id = NULL)
     {

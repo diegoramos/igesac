@@ -78,6 +78,8 @@
 			</div>
 		<?php } ?>
 
+		<?php $this->load->helper('ruc'); ?>
+
 			<?php echo form_open_multipart('customers/save/'.$person_info->person_id,array('id'=>'customer_form','class'=>'form-horizontal')); 	?>
 
 			<div class="panel panel-piluku">

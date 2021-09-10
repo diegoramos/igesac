@@ -1,4 +1,9 @@
 <?php
+
+require_once  FCPATH . 'vendor/autoload.php';
+
+use Bitzua\Curl;
+
 class Appconfig extends CI_Model 
 {
 	
@@ -26,15 +31,15 @@ class Appconfig extends CI_Model
 			$res = $this->get_real_tipo_cambio();
     		if ($res!=null) {
     			$new_data = array(
-    				'compra'=>$res->compra,
-    				'venta'=>$res->venta,
+    				'compra'=>$res['compra'],
+    				'venta'=>$res['venta'],
     				'fecha'=>$fecha
-				);
-				if ($this->exists_tipo_cambio()->num_rows()>0) {
-					$this->update_tipo_cambio($new_data);
-				} else {
-					$this->save_tipo_cambio($new_data);
-				}
+					);
+					if ($this->exists_tipo_cambio()->num_rows()>0) {
+						$this->update_tipo_cambio($new_data);
+					} else {
+						$this->save_tipo_cambio($new_data);
+					}
     		}
     	}
 	}
@@ -55,11 +60,28 @@ class Appconfig extends CI_Model
 	}
 	
 	function get_real_tipo_cambio()
-    {
-        require_once(APPPATH . 'libraries/TipoCambioSunat/TipoCambioSunat.php');
-		$tipo_cambio = new TipoCambioSunat();
-		$result = $tipo_cambio->consultarTipoCambio();
-        return isset($result[0]) ? $result[0] : null;
+  {
+    //require_once(APPPATH . 'libraries/TipoCambioSunat/TipoCambioSunat.php');
+		//$tipo_cambio = new TipoCambioSunat();
+		//$result = $tipo_cambio->consultarTipoCambio();
+    //return isset($result[0]) ? $result[0] : null;
+
+		$refer  = 'https://www.sunat.gob.pe/';
+		$url 	= 'https://www.sunat.gob.pe/a/txt/tipoCambio.txt';
+		$curl 	= new cURL($refer, $url);
+		$getRes = $curl->getRequest();
+
+		$arr = explode('|', trim($getRes));
+
+			$fecha  = \DateTime::createFromFormat("d/m/Y", trim($arr[0]));
+			$result = [
+				"fecha"  => trim($fecha->format("Y-m-d H:i:s")),
+				"compra" => trim($arr[1]),
+				"venta"  => trim($arr[2]),
+			];
+
+		return $result;
+
 	}
 	//fin de tipo cambio
 	function get($key)

@@ -221,7 +221,6 @@ function do_delete(url)
 				.end().animate({opacity:0},1200,"linear",function()
 				{
 					$(this).remove();
-					
 				});
 			});
 			
@@ -232,7 +231,6 @@ function do_delete(url)
 		{
 			show_feedback('error', response.message,COMMON_ERROR);
 		}
-		
 
 	},"json");
 }
@@ -241,9 +239,7 @@ function enable_select_all()
 {
 	//Keep track of enable_select_all has been called
 	if(!enable_select_all.enabled)
-		enable_select_all.enabled=true;
-	
-	
+		enable_select_all.enabled=true;	
 	$(document).on('click', ".btn-select-all", function(e) {
 		e.preventDefault();
 		
@@ -257,9 +253,6 @@ function enable_select_all()
 			$("#select_all").prop('checked', true).trigger('change');
 			$(this).toggleClass('active', true);
 		}
-		
-		
-		
 		return false;
 	});
 

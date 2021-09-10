@@ -708,7 +708,6 @@ class Items extends Secure_area implements Idata_controller
 		}
 		
 		$data['item_images']=$this->Item->get_item_images($item_id);
-		
 		$data['categories'][''] = lang('common_select_category');
 		
 		$categories = $this->Category->sort_categories_and_sub_categories($this->Category->get_all_categories_and_sub_categories());
@@ -868,7 +867,6 @@ class Items extends Secure_area implements Idata_controller
 		$this->check_action_permission('add_update');
 				
 		$data = $this->_get_item_data($item_id);
-		
 		$data['category'] = $this->Category->get_full_path($data['item_info']->category_id);
 		$data['redirect'] = $this->input->get('redirect');
 		
@@ -1990,7 +1988,7 @@ class Items extends Secure_area implements Idata_controller
 			}
 		}
 		
-    $this->load->library('image_lib');
+    	$this->load->library('image_lib');
 		
 		if (isset($_FILES['image_files']))
 		{
@@ -2002,22 +2000,20 @@ class Items extends Secure_area implements Idata_controller
 				{
 					continue;
 				}
-				
 				$allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
 				$extension = strtolower(pathinfo($_FILES['image_files']['name'][$k], PATHINFO_EXTENSION));
 		    if (in_array($extension, $allowed_extensions))
 		    {
-					
 			    $config['image_library'] = 'gd2';
-			    $config['source_image']	= $_FILES['image_files']['tmp_name'][$k];
+			    $config['source_image']	= './uploads/'.$_FILES['image_files']['tmp_name'][$k];
 			    $config['create_thumb'] = FALSE;
 			    $config['maintain_ratio'] = TRUE;
 			    $config['width']	 = 1200;
 			    $config['height']	= 900;
-					$this->image_lib->initialize($config);
+				$this->image_lib->initialize($config);
 			    $this->image_lib->resize();
-		   	 	$this->load->model('Appfile');
-			    $image_file_id = $this->Appfile->save($_FILES['image_files']['name'][$k], file_get_contents($_FILES['image_files']['tmp_name'][$k]));
+		   	 	$this->load->model('Appfile');exit();
+			    $image_file_id = $this->Appfile->save_file($_FILES['image_files']['name'][$k]);
 		  		$this->Item->add_image($item_id, $image_file_id);
 					$last_image_id = $image_file_id;
 				}
@@ -3176,7 +3172,7 @@ class Items extends Secure_area implements Idata_controller
 		
 		//Write to app files
  	 	$this->load->model('Appfile');
-    $app_file_file_id = $this->Appfile->save($_FILES["file"]["name"], file_get_contents($_FILES["file"]["tmp_name"]),'+3 hours');
+    	$app_file_file_id = $this->Appfile->save($_FILES["file"]["name"], file_get_contents($_FILES["file"]["tmp_name"]),'+3 hours');
 		//Store file_id from app files in session so we can reference later
 		$this->session->set_userdata("excel_import_file_id",$app_file_file_id);
 		

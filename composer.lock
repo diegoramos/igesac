@@ -4,23 +4,69 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7857fa279b6fd47ea258504cc73aec8e",
+    "content-hash": "d7b87b474f335f66cc8d92176e69af96",
     "packages": [
         {
-            "name": "giansalex/peru-consult",
-            "version": "v4.4.1",
+            "name": "bitzua/tipo-cambio-sunat",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/giansalex/peru-consult.git",
-                "reference": "28aecbb5434781420582454079997a5f74a4fecd"
+                "url": "https://github.com/diegoramos/tipocambiosunat.git",
+                "reference": "2ae2a1661548db970487dedc2612df9e0562e47f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giansalex/peru-consult/zipball/28aecbb5434781420582454079997a5f74a4fecd",
-                "reference": "28aecbb5434781420582454079997a5f74a4fecd",
+                "url": "https://api.github.com/repos/diegoramos/tipocambiosunat/zipball/2ae2a1661548db970487dedc2612df9e0562e47f",
+                "reference": "2ae2a1661548db970487dedc2612df9e0562e47f",
                 "shasum": ""
             },
             "require": {
+                "ext-curl": "*",
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bitzua\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "R Diego",
+                    "email": "diego@bitzua.com"
+                }
+            ],
+            "description": "Tipo de cambio Sunat",
+            "keywords": [
+                "sunat",
+                "tipo cambio"
+            ],
+            "support": {
+                "issues": "https://github.com/diegoramos/tipocambiosunat/issues",
+                "source": "https://github.com/diegoramos/tipocambiosunat/tree/v1.0"
+            },
+            "time": "2021-07-27T03:39:01+00:00"
+        },
+        {
+            "name": "giansalex/peru-consult",
+            "version": "v4.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giansalex/peru-consult.git",
+                "reference": "8907b07b1d4346948d7a8169f6a58f2867f9be0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giansalex/peru-consult/zipball/8907b07b1d4346948d7a8169f6a58f2867f9be0a",
+                "reference": "8907b07b1d4346948d7a8169f6a58f2867f9be0a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-libxml": "*",
@@ -64,7 +110,7 @@
             ],
             "support": {
                 "issues": "https://github.com/giansalex/peru-consult/issues",
-                "source": "https://github.com/giansalex/peru-consult/tree/v4.4.1"
+                "source": "https://github.com/giansalex/peru-consult/tree/v4.4.4"
             },
             "funding": [
                 {
@@ -76,7 +122,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2021-04-16T02:08:44+00:00"
+            "time": "2021-07-13T03:43:57+00:00"
         },
         {
             "name": "mpdf/mpdf",

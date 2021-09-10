@@ -1,6 +1,7 @@
 {
     "require": {
         "mpdf/mpdf": "^7.1",
-        "giansalex/peru-consult": "^4.4"
+        "giansalex/peru-consult": "^4.4",
+        "bitzua/tipo-cambio-sunat": "^1.0"
     }
 }

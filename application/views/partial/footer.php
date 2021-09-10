@@ -7,6 +7,12 @@
 		</div>
 		<!---content -->
 	</div>
-	<script src="<?php echo base_url().'assets/js/guia.js?'.ASSET_TIMESTAMP;?>" type="text/javascript" charset="UTF-8"></script>	
+	<script src="<?php echo base_url().'assets/js/guia.js?'.ASSET_TIMESTAMP;?>" type="text/javascript" charset="UTF-8"></script>
+	<script>
+		$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+			event.preventDefault();
+			$(this).ekkoLightbox();
+		});
+	</script>
 </body>
 </html>

@@ -9,7 +9,7 @@ class Locations extends Secure_area implements Idata_controller
 		parent::__construct('locations');
 		$this->lang->load('locations');
 		$this->lang->load('module');
-		$this->load->model('Number_invoice');	
+		$this->load->model('Number_invoice');
 		
 	}
 	

@@ -1112,13 +1112,14 @@
 
 <?php
 $exchange_rates = $this->Appconfig->get_exchange_rates()->result_array();
+
 if(count($exchange_rates))
 {
 	$exchange_options = array('1|'.$this->config->item('currency_code').'|'.$this->config->item('currency_symbol').'|'.$this->config->item('currency_symbol_location').'|'.$this->config->item('number_of_decimals').'|'.$this->config->item('thousands_separator').'|'.$this->config->item('decimal_point') => $this->config->item('currency_code') ? $this->config->item('currency_code') : lang('common_default'));
 	
 	foreach($exchange_rates as $exchange_row)
 	{
-		$exchange_options[$exchange_row['exchange_rate'].'|'.$exchange_row['currency_code_to'].'|'.$exchange_row['currency_symbol'].'|'.$exchange_row['currency_symbol_location'].'|'.$exchangechange_row['number_of_decimals'].'|'.$exchange_row['thousands_separator'].'|'.$exchange_row['decimal_point']] = $exchange_row['currency_code_to'];
+		$exchange_options[$exchange_row['exchange_rate'].'|'.$exchange_row['currency_code_to'].'|'.$exchange_row['currency_symbol'].'|'.$exchange_row['currency_symbol_location'].'|'.$exchange_row['thousands_separator'].'|'.$exchange_row['decimal_point']] = $exchange_row['currency_code_to'];
 	}
 	?>
 	<div class="amount-block exchange">

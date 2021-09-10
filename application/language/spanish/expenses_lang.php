@@ -32,16 +32,10 @@ $lang['expenses_cleanup_old_expenses'] = 'Eliminar gastos antiguos';
 $lang['expenses_cleanup_sucessful'] = 'Se eliminaron los gastos de manera exitosa';
 $lang['expenses_confirm_cleanup'] = '¿Está seguro que desea eliminar los gastos?';
 
-
 $lang['expenses_type'] = 'Tipo';
-
 
 $lang['employee_name'] = 'Nombre del empleado';
 $lang['location_name'] = 'Nombre de la localización';
-
-
-
-
 
 $lang['expenses_basic_information'] = 'Información básica de gastos';
 $lang['expenses_successful_undeleted'] = 'Gasto eliminado recuperado de manera exitosa';

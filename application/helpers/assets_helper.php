@@ -38,6 +38,7 @@ function get_css_files()
 		array('path' =>'assets/css/jsgrid-theme.css'),
 		array('path' =>'assets/css/bootstrap-tokenfield.css'),
 		array('path' =>'assets/css/pingrid.css'),
+		array('path' =>'assets/css/ekko-lightbox.css'),
 	);
 	
 	if(!defined("ASSET_MODE") or ASSET_MODE == 'development')
@@ -111,6 +112,7 @@ function get_js_files()
 			array('path' => 'assets/js/bootstrap-tokenfield.js'),
 			array('path' => 'assets/js/pingrid.js'),
 			array('path' => 'assets/js/html2canvas.min.js'),
+			array('path' => 'assets/js/ekko-lightbox.min.js'),
 		);
 	}
 

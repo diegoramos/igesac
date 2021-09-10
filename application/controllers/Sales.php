@@ -2880,6 +2880,9 @@ class Sales extends Secure_area
 	  	if ($is_ajax)
 			{
 				$this->load->view("sales/register",$data);
+				echo "<pre>";
+				print_r ($data);
+				echo "</pre>";
 			}
 			else
 			{

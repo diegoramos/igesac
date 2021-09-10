@@ -25,6 +25,15 @@ $lang['module_config_desc']='Configuración de la tienda';
 $lang['module_receivings']='Recepción';
 $lang['module_receivings_desc']='Procesar recepción';
 
+$lang['module_requirements']='Requerimientos';
+$lang['module_requirements_desc']='Agregar, actualizar, buscar y eliminar requerimientos';
+$lang['module_requirements_add_update']='Agregar, actualizar';
+$lang['module_requirements_delete']='Eliminar requerimientos';
+$lang['module_requirements_search']='Buscar requerimientos';
+
+$lang['module_workreports']='Informes';
+$lang['module_workreports_desc']='Agregar, actualizar, buscar y eliminar informes';
+
 $lang['module_giftcards']='Tarjetas de regalo';
 $lang['module_giftcards_desc']='Agregar, actualizar, buscar y eliminar tarjetas de regalo';
 

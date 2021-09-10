@@ -113,7 +113,7 @@
 					));?>
 					<label for="del_image_<?php echo $item_image['image_id']; ?>"><span></span></label>
 				</div>
-				<?php echo img(array('src' => app_file_url($item_image['image_id']),'class'=>'img-polaroid img-polaroid-s')); ?>
+				<?php echo img(array('src' => app_all_file_url($item_image['image_id']),'class'=>'img-polaroid img-polaroid-s')); ?>
 				
 				<?php 
 				

@@ -14,6 +14,13 @@ function app_file_url($file_id)
 	return site_url('app_files/view/'.$file_id.'?timestamp='.$CI->Appfile->get_file_timestamp($file_id));
 }
 
+function app_all_file_url($file_id)
+{
+  $CI =& get_instance();
+	$CI->load->model('Appfile');
+	return site_url('uploads/'.$CI->Appfile->get_file($file_id));
+}
+
 function tel($number)
 {
 	if ($number)

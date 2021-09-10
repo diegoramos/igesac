@@ -13,6 +13,19 @@ class Appfile extends CI_Model
 		return "";
 		
 	}
+
+	function get_file($file_id)
+	{
+		$query = $this->db->get_where('all_files', array('file_id' => $file_id), 1);
+		
+		if($query->num_rows()==1)
+		{
+			return $query->row()->file_name;
+		}
+		
+		return "";
+		
+	}
 	
 	function get_file_timestamp($file_id)
 	{
@@ -38,7 +51,7 @@ class Appfile extends CI_Model
 		{
 			$cur_timezone = date_default_timezone_get();
 			//We are doing this to make sure same timezone is used for expiration date
-			date_default_timezone_set('America/New_York');
+			date_default_timezone_set('America/Lima');
 		
 		 	$file_expires = date('Y-m-d H:i:s', strtotime($file_expires));
 			date_default_timezone_set($cur_timezone);
@@ -64,7 +77,39 @@ class Appfile extends CI_Model
 		
 		return false;
 	}
-	
+
+	function save_file($file_name, $file_expires = NULL, $file_id = false)
+	{
+		if ($file_expires !== NULL)
+		{
+			$cur_timezone = date_default_timezone_get();
+			//We are doing this to make sure same timezone is used for expiration date
+			date_default_timezone_set('America/Lima');
+		
+		 	$file_expires = date('Y-m-d H:i:s', strtotime($file_expires));
+			date_default_timezone_set($cur_timezone);
+		}
+		
+		$file_data=array(
+		'file_name'=>$file_name,
+		'expires'=> $file_expires,
+		'timestamp' =>  date('Y-m-d H:i:s'),
+		);
+		
+		//if exists update
+		if($this->db->where('file_id', $file_id)->count_all_results('all_files') == 1)
+		{
+			return $this->update($file_id, $file_data);
+		}
+		
+		if ($this->db->insert('all_files', $file_data))
+		{
+			return $this->db->insert_id();
+		}
+		
+		return false;
+	}
+
 	private function update($file_id, $file_data)
 	{
 		$this->db->where('file_id', $file_id);

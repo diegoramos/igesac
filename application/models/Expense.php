@@ -267,7 +267,7 @@ class Expense extends CI_Model {
 	 
 	  		$this->db->select('name');
 	  		$this->db->from('categories');
-	      $this->db->like('name', $search,'after');
+	        $this->db->like('name', $search,'after');
 		
 	
 	  		$this->db->limit($limit);
